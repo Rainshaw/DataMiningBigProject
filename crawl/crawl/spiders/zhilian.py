@@ -1,11 +1,17 @@
 import scrapy
+import redis
 from scrapy_redis.spiders import RedisSpider
 
 from ..items import PositionSpiderItem
+from .. import settings
 
 
 class ZLSpider(RedisSpider):
     name = "zhi_lian"
+
+    def __init__(self, **kwargs):
+        self.redis_cli = redis.Redis(host=settings.REDIS_HOST, port=settings.REDIS_PORT)
+        super().__init__(**kwargs)
 
     def parse(self, response, **kwargs):
         positions = response.css('div.joblist-box__item')
@@ -25,6 +31,7 @@ class ZLSpider(RedisSpider):
         next_url = '&'.join(next_url)
         print("++++++++++++++++++++++++++++")
         print(next_url)
+        self.redis_cli.lpush("zhi_lian:start_urls", next_url)
         print("++++++++++++++++++++++++++++")
         for position in positions:
             url = position.css('a::attr(href)').get()
@@ -41,11 +48,6 @@ class ZLSpider(RedisSpider):
             item["position_degree"] = jobdesc[2].strip()
             print(item.__dict__)
             yield scrapy.Request(url=url, meta={"meta_item": item}, callback=self.page_parse)
-
-        next_page = response.css('.btn.soupager__btn')[1]
-        next_page = next_page.css('.soupager__btn--disable')
-        if not len(next_page):
-            yield scrapy.Request(url=next_url, meta={"next_page": True}, callback=self.parse)
 
     def page_parse(self, response):
         item = response.meta['meta_item']
