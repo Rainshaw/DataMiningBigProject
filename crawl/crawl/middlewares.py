@@ -25,7 +25,7 @@ class SeleniumMiddleware(object):
                     })
                   """
         })
-        self.loadTime = 8
+        self.loadTime = 10
         self.login()
 
         self.homePageHandle = self.browser.current_window_handle
