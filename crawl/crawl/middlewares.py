@@ -59,6 +59,9 @@ class SeleniumMiddleware(object):
             time.sleep(self.loadTime)  # 给浏览器加载数据的时间
             page_text = self.browser.page_source
         else:
+            if self.browser.current_window_handle != self.homePageHandle:
+                self.browser.close()
+            self.browser.switch_to.window(self.homePageHandle)
             self.browser.get(request.url)
             time.sleep(self.loadTime)  # 给浏览器加载数据的时间
             # 获取渲染后的数据
