@@ -45,24 +45,13 @@ class SeleniumMiddleware(object):
         self.login()
         self.homePageHandle1 = self.browser1.current_window_handle
 
-    def login(self):
-        if os.path.exists('zhi_lian.json'):
+    def login(self, ignore_cookie_file=False):
+        if not ignore_cookie_file and os.path.exists('zhi_lian.json'):
             self.browser1.get("https://www.zhaopin.com/")
             with open('zhi_lian.json', 'r', encoding='utf-8') as f:
                 list_cookies = json.loads(f.read())
             for cookie in list_cookies:
                 if cookie['domain'] != '.zhaopin.com':
-                    continue
-                self.browser1.add_cookie({
-                    'domain': cookie['domain'],
-                    'name': cookie['name'],
-                    'value': cookie['value'],
-                    'path': '/',
-                    'expires': None
-                })
-            self.browser1.get('http://i.zhaopin.com')
-            for cookie in list_cookies:
-                if cookie['domain'] == '.zhaopin.com':
                     continue
                 self.browser1.add_cookie({
                     'domain': cookie['domain'],
@@ -80,6 +69,7 @@ class SeleniumMiddleware(object):
                 f.write(json_cookies)
 
         self.isLogin = True
+        time.sleep(10)
 
     def process_request(self, request, spider):
         if request.meta.get('meta_item') is not None:
@@ -91,4 +81,11 @@ class SeleniumMiddleware(object):
             self.browser1.get(request.url)
             time.sleep(random.randint(8, 15))
             page_text = self.browser1.page_source
+
+            try:
+                self.browser1.find_element_by_class_name('page-empty')
+                self.login(ignore_cookie_file=True)
+                return self.process_request(request, spider)
+            except Exception:
+                pass
             return HtmlResponse(url=self.browser1.current_url, body=page_text, encoding='utf-8', request=request)
