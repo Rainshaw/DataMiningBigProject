@@ -21,7 +21,6 @@ BOT_NAME = 'crawl'
 
 SPIDER_MODULES = ['crawl.spiders']
 NEWSPIDER_MODULE = 'crawl.spiders'
-LOG_LEVEL = 'INFO'
 
 # Specify the host and port to use when connecting to Redis
 REDIS_HOST = '162.105.145.22'
@@ -35,6 +34,9 @@ DUPEFILTER_CLASS = "scrapy_redis.dupefilter.RFPDupeFilter"
 
 # Enables stats shared based on Redis
 STATS_CLASS = "scrapy_redis.stats.RedisStatsCollector"
+
+# Don't cleanup redis queues, allows to pause/resume crawls.
+SCHEDULER_PERSIST = True
 
 # Crawl responsibly by identifying yourself (and your website) on the user-agent
 # USER_AGENT = 'crawl (+http://www.yourdomain.com)'
