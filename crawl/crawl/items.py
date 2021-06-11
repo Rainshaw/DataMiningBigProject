@@ -3,11 +3,11 @@
 # See documentation in:
 # https://docs.scrapy.org/en/latest/topics/items.html
 from scrapy_djangoitem import DjangoItem
-from apps.position.models import Position
+from apps.position.models import PositionOri
 
 
 class PositionSpiderItem(DjangoItem):
-    django_model = Position
+    django_model = PositionOri
 
 
 # class CrawlItem(scrapy.Item):

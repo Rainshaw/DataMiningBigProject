@@ -43,7 +43,7 @@ class ZLSpider(RedisSpider):
             item["company_scale"] = comdesc[1].strip()
             item["detail_url"] = url
             jobdesc = position.css('ul.iteminfo__line2__jobdesc__demand li::text').getall()
-            item["position_base"] = jobdesc[0].strip().split('-')[0]
+            item["position_base"] = jobdesc[0].strip()
             item["position_experience"] = jobdesc[1].strip()
             item["position_degree"] = jobdesc[2].strip()
             print(item.__dict__)
@@ -52,31 +52,11 @@ class ZLSpider(RedisSpider):
     def page_parse(self, response):
         item = response.meta['meta_item']
         try:
-            vacancies = response.css('ul.summary-plane__info li::text').getall()
-            if len(vacancies):
-                vacancies = vacancies[-1]
-            item['position_vacancies'] = int(vacancies.replace(u'人', '').replace(' ', '').replace(u'招', ''))
+            item['position_vacancies'] = response.css('ul.summary-plane__info li::text').getall()[-1]
 
-            salary = response.css('span.summary-plane__salary::text').get()
-            if "面议" in salary:
-                min_salary = max_salary = "面议"
-            else:
-                if '·' in salary:
-                    salary = salary.split('·')[0]
-                min_salary, max_salary = salary.split('-')
-                if '万' in min_salary:
-                    min_salary = float(min_salary[:-1]) * 10000
-                elif '千' in min_salary:
-                    min_salary = float(min_salary[:-1]) * 1000
-                if '万' in max_salary:
-                    max_salary = float(max_salary[:-1]) * 10000
-                elif '千' in max_salary:
-                    max_salary = float(max_salary[:-1]) * 1000
-            item['position_min_salary'] = min_salary
-            item['position_max_salary'] = max_salary
+            item['position_salary'] = response.css('span.summary-plane__salary::text').get()
 
-            item['position_update_time'] = response.css('span.summary-plane__time::text').get(). \
-                replace(' ', '').replace(u'更新于', '')
+            item['position_update_time'] = response.css('span.summary-plane__time::text').get()
 
             item['position_skill'] = ','.join(response.css('span.describtion__skills-item::text').getall())
 
