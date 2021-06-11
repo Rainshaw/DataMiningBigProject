@@ -1,3 +1,4 @@
+import json
 import os
 import platform
 import random
@@ -45,8 +46,26 @@ class SeleniumMiddleware(object):
         self.homePageHandle1 = self.browser1.current_window_handle
 
     def login(self):
-        self.browser1.get("https://passport.zhaopin.com/login")
-        input('请手动登录，登录好了之后回车：')
+        if os.path.exists('zhi_lian.json'):
+            self.browser1.delete_all_cookies()
+            with open('zhi_lian.json', 'r', encoding='utf-8') as f:
+                list_cookies = json.loads(f.read())
+            for cookie in list_cookies:
+                self.browser1.add_cookie({
+                    'domain': cookie['domain'],
+                    'name': cookie['name'],
+                    'value': cookie['value'],
+                    'path': '/',
+                    'expires': None
+                })
+        else:
+            self.browser1.get("https://passport.zhaopin.com/login")
+            input('请手动登录，登录好了之后回车：')
+            cookies = self.browser1.get_cookies()
+            json_cookies = json.dumps(cookies)
+            with open('zhi_lian.json', 'w') as f:
+                f.write(json_cookies)
+
         self.isLogin = True
 
     def process_request(self, request, spider):
