@@ -23,6 +23,8 @@ class SeleniumMiddleware(object):
             self.browser1 = webdriver.Chrome(
                 executable_path=f'{os.path.dirname(os.path.dirname(os.path.abspath(__file__)))}/chromedriver',
                 chrome_options=options)
+            options = webdriver.ChromeOptions()
+            options.add_argument("--proxy-server=socks5://127.0.0.1:7890")
             self.browser2 = webdriver.Chrome(
                 executable_path=f'{os.path.dirname(os.path.dirname(os.path.abspath(__file__)))}/chromedriver',
                 chrome_options=options)

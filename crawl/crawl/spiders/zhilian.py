@@ -41,7 +41,7 @@ class ZLSpider(RedisSpider):
             comdesc = position.css('span.iteminfo__line2__compdesc__item::text').getall()
             item['company_class'] = comdesc[0].strip()
             item["company_scale"] = comdesc[1].strip()
-            item["detail_url"] = url
+            item["detail_url"] = url.split('?')[0]
             jobdesc = position.css('ul.iteminfo__line2__jobdesc__demand li::text').getall()
             item["position_base"] = jobdesc[0].strip()
             item["position_experience"] = jobdesc[1].strip()
