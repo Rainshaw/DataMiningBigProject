@@ -47,10 +47,23 @@ class SeleniumMiddleware(object):
 
     def login(self):
         if os.path.exists('zhi_lian.json'):
-            self.browser1.delete_all_cookies()
+            self.browser1.get("https://www.zhaopin.com/")
             with open('zhi_lian.json', 'r', encoding='utf-8') as f:
                 list_cookies = json.loads(f.read())
             for cookie in list_cookies:
+                if cookie['domain'] != '.zhaopin.com':
+                    continue
+                self.browser1.add_cookie({
+                    'domain': cookie['domain'],
+                    'name': cookie['name'],
+                    'value': cookie['value'],
+                    'path': '/',
+                    'expires': None
+                })
+            self.browser1.get('http://i.zhaopin.com')
+            for cookie in list_cookies:
+                if cookie['domain'] == '.zhaopin.com':
+                    continue
                 self.browser1.add_cookie({
                     'domain': cookie['domain'],
                     'name': cookie['name'],
