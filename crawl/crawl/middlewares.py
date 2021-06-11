@@ -85,7 +85,7 @@ class SeleniumMiddleware(object):
             page_text = self.browser1.page_source
 
             try:
-                self.browser1.find_element_by_class_name('page-empty')
+                self.browser1.find_element_by_class_name('page-empty__tips-login')
                 self.login(ignore_cookie_file=True)
                 return self.process_request(request, spider)
             except Exception:
