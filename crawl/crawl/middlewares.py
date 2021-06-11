@@ -17,10 +17,14 @@ class SeleniumMiddleware(object):
             self.browser2 = webdriver.Chrome(
                 executable_path=f'{os.path.dirname(os.path.dirname(os.path.abspath(__file__)))}\\chromedriver.exe')
         elif platform.system() == "Darwin":
+            options = webdriver.ChromeOptions()
+            options.add_argument("--proxy-server=socks5://162.105.145.137:1080")
             self.browser1 = webdriver.Chrome(
-                executable_path=f'{os.path.dirname(os.path.dirname(os.path.abspath(__file__)))}/chromedriver')
+                executable_path=f'{os.path.dirname(os.path.dirname(os.path.abspath(__file__)))}/chromedriver',
+                chrome_options=options)
             self.browser2 = webdriver.Chrome(
-                executable_path=f'{os.path.dirname(os.path.dirname(os.path.abspath(__file__)))}/chromedriver')
+                executable_path=f'{os.path.dirname(os.path.dirname(os.path.abspath(__file__)))}/chromedriver',
+                chrome_options=options)
         else:
             raise Exception("不支持的操作系统！")
         self.browser1.execute_cdp_cmd("Page.addScriptToEvaluateOnNewDocument", {

@@ -31,6 +31,6 @@ city_code = {
 }
 
 for code in city_code.values():
-    redis_cli.lpush("zhi_lian:start_urls", f"https://sou.zhaopin.com/?jl={code}&kw=%E6%95%B0%E6%8D%AE%E6%8C%96%E6%8E%98")
+    redis_cli.rpush("zhi_lian:start_urls", f"https://sou.zhaopin.com/?jl={code}&kw=%E6%95%B0%E6%8D%AE%E6%8C%96%E6%8E%98")
 
 
