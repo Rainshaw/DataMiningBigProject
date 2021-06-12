@@ -16,7 +16,7 @@ django.setup()
 from apps.position.models import PositionOri
 
 options = webdriver.ChromeOptions()
-options.add_argument("--proxy-server=socks5://162.105.145.137:1080")
+# options.add_argument("--proxy-server=socks5://162.105.145.137:1080")
 browser1 = webdriver.Chrome(executable_path=f'{os.path.dirname(os.path.abspath(__file__))}/chromedriver',
                             chrome_options=options)
 
