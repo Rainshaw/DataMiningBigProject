@@ -47,26 +47,4 @@ class ZLSpider(RedisSpider):
             item["position_experience"] = jobdesc[1].strip()
             item["position_degree"] = jobdesc[2].strip()
             print(item.__dict__)
-            yield scrapy.Request(url=url, meta={"meta_item": item}, callback=self.page_parse)
-
-    def page_parse(self, response):
-        item = response.meta['meta_item']
-        try:
-            item['position_vacancies'] = response.css('ul.summary-plane__info li::text').getall()[-1]
-
-            item['position_salary'] = response.css('span.summary-plane__salary::text').get()
-
-            item['position_update_time'] = response.css('span.summary-plane__time::text').get()
-
-            item['position_skill'] = ','.join(response.css('span.describtion__skills-item::text').getall())
-
-            item['position_description'] = response.css('div.describtion__detail-content').get()
-
-            item['position_welfare'] = ','.join(response.css('span.highlights__content-item::text').getall())
-
-            item['position_location'] = response.css('span.job-address__content-text::text').get()
-            print(item.__dict__)
-        except Exception:
-            pass
-        finally:
             yield item

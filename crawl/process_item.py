@@ -41,6 +41,17 @@ city_code = {
     '台湾': 563
 }
 
-for code in city_code.values():
+# for code in city_code.values():
+#     # 数据挖掘
+#     redis_cli.rpush("zhi_lian:start_urls",
+#                     f"https://sou.zhaopin.com/?jl={code}&kw=%E6%95%B0%E6%8D%AE%E6%8C%96%E6%8E%98")
+
+for code in range(550, 564):
+    # 大数据
     redis_cli.rpush("zhi_lian:start_urls",
-                    f"https://sou.zhaopin.com/?jl={code}&kw=%E6%95%B0%E6%8D%AE%E6%8C%96%E6%8E%98")
+                    f"https://sou.zhaopin.com/?jl={code}&kw=%E5%A4%A7%E6%95%B0%E6%8D%AE")
+
+for code in city_code.values():
+    # 机器学习
+    redis_cli.rpush("zhi_lian:start_urls",
+                    f"https://sou.zhaopin.com/?jl={code}&kw=%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0")

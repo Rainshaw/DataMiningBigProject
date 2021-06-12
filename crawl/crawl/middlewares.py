@@ -15,17 +15,10 @@ class SeleniumMiddleware(object):
         if platform.system() == "Windows":
             self.browser1 = webdriver.Chrome(
                 executable_path=f'{os.path.dirname(os.path.dirname(os.path.abspath(__file__)))}\\chromedriver.exe')
-            self.browser2 = webdriver.Chrome(
-                executable_path=f'{os.path.dirname(os.path.dirname(os.path.abspath(__file__)))}\\chromedriver.exe')
         elif platform.system() == "Darwin":
             options = webdriver.ChromeOptions()
             options.add_argument("--proxy-server=socks5://162.105.145.137:1080")
             self.browser1 = webdriver.Chrome(
-                executable_path=f'{os.path.dirname(os.path.dirname(os.path.abspath(__file__)))}/chromedriver',
-                chrome_options=options)
-            options = webdriver.ChromeOptions()
-            options.add_argument("--proxy-server=socks5://127.0.0.1:7890")
-            self.browser2 = webdriver.Chrome(
                 executable_path=f'{os.path.dirname(os.path.dirname(os.path.abspath(__file__)))}/chromedriver',
                 chrome_options=options)
         else:
@@ -37,13 +30,7 @@ class SeleniumMiddleware(object):
                     })
                   """
         })
-        self.browser2.execute_cdp_cmd("Page.addScriptToEvaluateOnNewDocument", {
-            "source": """
-                            Object.defineProperty(navigator, 'webdriver', {
-                              get: () => undefined
-                            })
-                          """
-        })
+
         self.login()
         self.homePageHandle1 = self.browser1.current_window_handle
 
@@ -74,20 +61,14 @@ class SeleniumMiddleware(object):
         time.sleep(10)
 
     def process_request(self, request, spider):
-        if request.meta.get('meta_item') is not None:
-            self.browser2.get(request.url.split('?')[0])
-            time.sleep(random.randint(8, 15))
-            page_text = self.browser2.page_source
-            return HtmlResponse(url=self.browser2.current_url, body=page_text, encoding='utf-8', request=request)
-        else:
-            self.browser1.get(request.url)
-            time.sleep(random.randint(8, 15))
-            page_text = self.browser1.page_source
+        self.browser1.get(request.url)
+        time.sleep(random.randint(8, 15))
+        page_text = self.browser1.page_source
 
-            try:
-                self.browser1.find_element_by_class_name('page-empty__tips-login')
-                self.login(ignore_cookie_file=True)
-                return self.process_request(request, spider)
-            except Exception:
-                pass
-            return HtmlResponse(url=self.browser1.current_url, body=page_text, encoding='utf-8', request=request)
+        try:
+            self.browser1.find_element_by_class_name('page-empty__tips-login')
+            self.login(ignore_cookie_file=True)
+            return self.process_request(request, spider)
+        except Exception:
+            pass
+        return HtmlResponse(url=self.browser1.current_url, body=page_text, encoding='utf-8', request=request)
