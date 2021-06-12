@@ -21,4 +21,4 @@ while True:
     queryset = PositionOri.objects.filter(position_description__isnull=True)
 
     for position in queryset:
-        redis_cli.sadd("zhi_lian_item:urls", position.id)
+        redis_cli.sadd("zhi_lian_items:id", position.id)
