@@ -16,7 +16,7 @@ django.setup()
 from apps.position.models import PositionOri
 
 options = webdriver.ChromeOptions()
-# options.add_argument("--proxy-server=socks5://162.105.145.137:1080")
+options.add_argument("--proxy-server=socks5://162.105.145.137:1080")
 browser1 = webdriver.Chrome(executable_path=f'{os.path.dirname(os.path.abspath(__file__))}/chromedriver',
                             chrome_options=options)
 
@@ -48,8 +48,6 @@ while True:
         print(f"save true, id: {position.id}")
     except:
         print(f"save false, id: {position.id}, url: {position.detail_url}")
-
-    time.sleep(600)
 
 
 browser1.quit()
