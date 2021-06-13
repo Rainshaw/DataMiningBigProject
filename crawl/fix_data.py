@@ -22,12 +22,17 @@ browser1 = webdriver.Chrome(executable_path=f'{os.path.dirname(os.path.abspath(_
 
 redis_cli = redis.Redis(host=settings.REDIS_HOST, port=settings.REDIS_PORT)
 
+print(options.arguments)
+
 while True:
-    position = PositionOri.objects.get(id=redis_cli.spop("zhi_lian_items:id"))
+    try:
+        position = PositionOri.objects.get(id=redis_cli.spop("zhi_lian_items:id"))
+    except:
+        continue
     if position.position_description is not None:
         continue
     browser1.get(position.detail_url)
-    time.sleep(random.randint(8, 12))
+    time.sleep(random.randint(10, 15))
     response = HtmlResponse(url=browser1.current_url, body=browser1.page_source, encoding='utf-8')
     try:
         position.position_vacancies = response.css('ul.summary-plane__info li::text').getall()[-1]
