@@ -41,17 +41,39 @@ city_code = {
     '台湾': 563
 }
 
-# for code in city_code.values():
-#     # 数据挖掘
-#     redis_cli.rpush("zhi_lian:start_urls",
-#                     f"https://sou.zhaopin.com/?jl={code}&kw=%E6%95%B0%E6%8D%AE%E6%8C%96%E6%8E%98")
+for code in city_code.values():
+    # 数据挖掘
+    redis_cli.rpush("zhi_lian:start_urls",
+                    f"https://sou.zhaopin.com/?jl={code}&kw=%E6%95%B0%E6%8D%AE%E6%8C%96%E6%8E%98")
 
-for code in range(550, 564):
     # 大数据
     redis_cli.rpush("zhi_lian:start_urls",
                     f"https://sou.zhaopin.com/?jl={code}&kw=%E5%A4%A7%E6%95%B0%E6%8D%AE")
 
-for code in city_code.values():
     # 机器学习
     redis_cli.rpush("zhi_lian:start_urls",
                     f"https://sou.zhaopin.com/?jl={code}&kw=%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0")
+
+    # 人工智能
+    redis_cli.rpush("zhi_lian:start_urls",
+                    f"https://sou.zhaopin.com/?jl={code}&kw=%E4%BA%BA%E5%B7%A5%E6%99%BA%E8%83%BD")
+
+    # 区块链
+    redis_cli.rpush("zhi_lian:start_urls",
+                    f"https://sou.zhaopin.com/?jl={code}&kw=%E5%8C%BA%E5%9D%97%E9%93%BE")
+
+    # 数据架构
+    redis_cli.rpush("zhi_lian:start_urls",
+                    f"https://sou.zhaopin.com/?jl={code}&kw=%E6%95%B0%E6%8D%AE%E6%9E%B6%E6%9E%84")
+
+    # 数据开发
+    redis_cli.rpush("zhi_lian:start_urls",
+                    f"https://sou.zhaopin.com/?jl={code}&kw=%E6%95%B0%E6%8D%AE%E5%BC%80%E5%8F%91")
+
+    # 算法工程师
+    redis_cli.rpush("zhi_lian:start_urls",
+                    f"https://sou.zhaopin.com/?jl={code}&kw=%E7%AE%97%E6%B3%95%E5%B7%A5%E7%A8%8B%E5%B8%88")
+
+    # 深度学习
+    redis_cli.rpush("zhi_lian:start_urls",
+                    f"https://sou.zhaopin.com/?jl={code}&kw=%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0")

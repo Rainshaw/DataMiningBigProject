@@ -4,6 +4,7 @@ import sys
 import time
 import redis
 import django
+import platform
 from selenium import webdriver
 from scrapy.http import HtmlResponse
 from crawl import settings
@@ -16,9 +17,15 @@ django.setup()
 from apps.position.models import PositionOri
 
 options = webdriver.ChromeOptions()
-# options.add_argument("--proxy-server=socks5://162.105.145.137:1080")
-browser1 = webdriver.Chrome(executable_path=f'{os.path.dirname(os.path.abspath(__file__))}/chromedriver',
-                            chrome_options=options)
+# options.add_argument("--proxy-server=socks5://127.0.0.1:1080")
+if platform.system() == "Darwin":
+    browser1 = webdriver.Chrome(executable_path=f'{os.path.dirname(os.path.abspath(__file__))}/chromedriver',
+                                chrome_options=options)
+elif platform.system() == "Windows":
+    browser1 = webdriver.Chrome(executable_path=f'{os.path.dirname(os.path.abspath(__file__))}\\chromedriver.exe',
+                                chrome_options=options)
+else:
+    raise Exception("不支持的操作系统！")
 
 redis_cli = redis.Redis(host=settings.REDIS_HOST, port=settings.REDIS_PORT)
 
@@ -51,8 +58,8 @@ while True:
 
         position.save()
         print(f"save true, id: {position.id}")
-    except:
+    except Exception as e:
+        print(e)
         print(f"save false, id: {position.id}, url: {position.detail_url}")
-
 
 browser1.quit()
