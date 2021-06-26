@@ -15,6 +15,7 @@ mysqlclient = "^2.0.3"
 requests = "^2.25.1"
 pandas = "^1.2.4"
 jupyter = "^1.0.0"
+pyecharts = "^1.9.0"
 
 [tool.poetry.dev-dependencies]
 
